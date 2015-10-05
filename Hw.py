@@ -38,10 +38,11 @@ def line_reader(file_path: str):
     with open(file_path, "r", encoding="utf8") as f:
         for line in f:
             yield line 
-    
-def save_to_file(name, content):
+
+
+def save_to_file(save_dir, name, content):
     if name:
-        with open("../{name}.txt".format(name=name), "a", encoding="utf8") as f:
+        with open("{dir}/{name}.txt".format(dir=save_dir, name=name), "a", encoding="utf8") as f:
             f.write(content)
 
 if __name__ == "__main__":
@@ -50,6 +51,8 @@ if __name__ == "__main__":
                         help='contains wich words want to matched in log')
     parser.add_argument('--log-file', type=str, dest='log_path', 
                         help='path of the parseble log')
+    parser.add_argument('--save-dir', type=str, dest='save_dir',
+                        help='path of the saving folder')
 
     args = parser.parse_args()
     dictionary = {}
@@ -58,6 +61,4 @@ if __name__ == "__main__":
     
     parser = Parser(dictionary)
     for line in line_reader(args.log_path):
-        save_to_file(parser.get_first_key_word_from_line(line.split()), line)
-    
-    
+        save_to_file(args.save_dir, parser.get_first_key_word_from_line(line.split()), line)
